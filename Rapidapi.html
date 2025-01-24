@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* // <uniquifier>: Use a unique and descriptive class name */
+
+.inconsolata-font {
+  font-family: "Inconsolata", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    background-color: #cdb4db;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.heading {
+    margin-top: -40px;
+}
+
+.url {
+    height: 40px;
+    width: 450px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: medium;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+}
+
+.btn {
+    height: 40px;
+    width: 55px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+}
+
+:hover.btn {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.summary-container {
+    height: 400px;
+    width: 800px;
+}
+
+.input-container {
+    margin-top: 20px;
+}
+
+.summary {
+    text-align: left;
+}
+
+.summary-container {
+    overflow-x: hidden;
+}
+  </style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <title>Article Summarizer</title>
+</head>
+
+<body class="inconsolata-font">
+  <div class="container">
+    <h2 class="heading">
+      Article Summarizer Application
+    </h2>
+    <div class="input-container">
+      <input type="url" name="url" id="url" class="url" placeholder="Enter article URL">
+      <button class="btn">Click</button>
+    </div>
+    <div class="summary-container">
+      <p class="summary">
+
+      </p>
+    </div>
+  </div>
+
+  <script >
+    const options = {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': '4218e772d8mshd3036d10d2f0012p1a8adbjsnbdbc9d7a30a6',
+        'x-rapidapi-host': 'article-extractor-and-summarizer.p.rapidapi.com'
+      }
+    };
+
+    const btn = document.querySelector(".btn")
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault()
+      const input = document.querySelector(".url").value
+      const display = document.querySelector(".summary")
+
+      display.innerText = "Please wait article is summarizing ...... "
+
+      const url = `https://article-extractor-and-summarizer.p.rapidapi.com/summarize?url=${input}&lang=en&engine=2`;
+
+      if (!/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(input)) {
+        display.innerText = "Please enter a valid URL ..."
+      } else {
+        fetch(url, options)
+          .then(data => data.json())
+          .then(data => {
+            display.innerText = data.summary
+          })
+          .catch((error) => {
+            console.log(error.message)
+            display.innerText = error?.message
+          })
+      }
+    })
+</script>
+</body>
+
+</html>
